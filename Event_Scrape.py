@@ -1,25 +1,42 @@
+#MODULES
 from bs4 import BeautifulSoup
 import requests
 
-# with open('GCPLabs.html') as html_file:
-#     soup = BeautifulSoup(html_file, 'lxml')
-
-# for article in soup.find_all('h3', class_='hide-from-toc'):
-#     print(article.text)
-
+# WEBSCRAPE SETUP
 html_target = 'https://www.greaterseattleonthecheap.com/free-and-cheap-things-to-do-in-seattle-this-weekend/'
 source = requests.get(html_target).text
 soup = BeautifulSoup(source, 'lxml')
 
-# All_Events = open('test.txt', 'w+')
-# All_Events.write(soup.prettify())
+#VARIABLES
+all_events_txt = open('test.txt', 'r+')
+event_set = set()
+event_links = set()
+
+#CHECK MONTH - CURRENT MONTH ***DRAFT***
+current_month = all_events_text.readlines()[1].
+new_month = soup.find("h3").text
+if extracted_month.find(month)= -1:
+  all_events_text.truncate(0)
+
+#READ IN PREVIOUS EVENTS
+for line in all_events_txt:
+    if line.find("http") != -1:
+        event_links.add(line.strip())
+    elif line != "":
+        event_set.add(line.strip())
+
+# #INPUT IN EVENTS
 for event in soup.find_all(class_ = "row event featured"):
     child = event.find("div").find("a")
-    print(child["href"])
-# for event in soup.find_all(class_ = "row event featured"):
-    # All_Events.write(event.text)
-    # All_Events.write('\n')
-    # children = event.find('div')
-    # print(children)
+    if not event.text in event_set:
+        event_set.add(event.text)
+        event_links.add(child["href"])
+        all_events_txt.write (event.h3.text)
+        all_events_txt.write('\n')
+        all_events_txt.write (child["href"])
+        all_events_txt.write('\n')
+        all_events_txt.write('\n')
 
+all_events_txt.close()
+# print(event_set)
 print('******WRITE COMPLETE******')

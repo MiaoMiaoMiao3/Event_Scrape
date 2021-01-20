@@ -1,0 +1,16 @@
+# DRAFT - cron.yaml
+cron:
+- description: refresh "value"
+  url: /refvalue
+  schedule: every 6 hours
+and app.yaml something like:
+
+application: valueref
+version: 1
+runtime: python38
+api_version: 1
+
+handlers:
+- url: /refvalue
+  script: refvalue.py
+  login: admin
