@@ -12,11 +12,10 @@ all_events_txt = open('test.txt', 'r+')
 event_set = set()
 event_links = set()
 
-#CHECK MONTH - CURRENT MONTH ***DRAFT***
-current_month = all_events_text.readlines()[1].
+#*****DRAFT***** CHECK MONTH - CURRENT MONTH 
+current_month = all_events_txt.readlines()[1]
 new_month = soup.find("h3").text
-if extracted_month.find(month)= -1:
-  all_events_text.truncate(0)
+all_events_txt.truncate(0)
 
 #READ IN PREVIOUS EVENTS
 for line in all_events_txt:
