@@ -8,12 +8,10 @@ source = requests.get(html_target).text
 soup = BeautifulSoup(source, 'lxml')
 
 #VARIABLES
-all_events_txt = open('test.txt', 'r+')
+all_events_txt = open('test.txt', 'w+')
 event_set = set()
 event_links = set()
 
-#*****DRAFT***** CHECK MONTH - CURRENT MONTH 
-current_month = all_events_txt.readlines()[1]
 new_month = soup.find("h3").text
 all_events_txt.truncate(0)
 
