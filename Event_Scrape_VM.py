@@ -1,16 +1,12 @@
 #MODULES
 from bs4 import BeautifulSoup
 import requests
-from google.cloud import storage
-from google.cloud.storage import Blob
 
 #CONSTANTS & VARIABLES
 html_target = 'https://www.greaterseattleonthecheap.com/free-and-cheap-things-to-do-in-seattle-this-weekend/'
-TXT_FILE = 'event.txt'
-storage_client = storage.Client.from_service_account_json("python-test2-key.json")
-BUCKET_NAME = 'python-test2-bucket'
+TXT_FILE = '/home/utp56479user/Event_Scraper/event.txt' #REPLACE WITH THE DIRECTORY YOU CREATED
+
 SRC_FILE = TXT_FILE
-DEST_BLOB_NAME = TXT_FILE
 event_set = set()
 event_links = set()
 
@@ -35,18 +31,3 @@ for event in soup.find_all(class_ = "row event featured"):
 
 
 all_events_txt.close()
-print('******WRITE COMPLETE******')
-
-#UPLOAD TO STORAGE BUCKET
-bucket = storage_client.get_bucket(BUCKET_NAME)
-
-blob = bucket.blob(SRC_FILE)
-blob.upload_from_filename(DEST_BLOB_NAME)
-
-print(
-    "File {} uploaded to {}.".format(
-        SRC_FILE, DEST_BLOB_NAME
-    )
-)
-
-

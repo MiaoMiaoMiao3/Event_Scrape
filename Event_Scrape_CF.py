@@ -24,7 +24,7 @@ data = {
 										"Name": "You"
 								}
 						],
-						"Subject": "Desktop Events Test",
+						"Subject": "Events this week!",
 						"TextPart": "",
 						"HTMLPart": f"<h3>Greetings! Things you should look into this weekend: </h3> <div style='white-space: pre-wrap'>{bucket_data}</div>"
 				}
