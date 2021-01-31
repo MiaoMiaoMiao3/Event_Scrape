@@ -4,7 +4,7 @@ import requests
 
 #CONSTANTS & VARIABLES
 html_target = 'https://www.greaterseattleonthecheap.com/free-and-cheap-things-to-do-in-seattle-this-weekend/'
-TXT_FILE = '/home/utp56479user/Event_Scraper/event.txt' #REPLACE WITH THE DIRECTORY YOU CREATED
+TXT_FILE = '/home/utp56479user/Event_Scraper/event.txt' #FULL DIRECTORY MUST BE SPECIFIED FOR CRON JOB
 
 SRC_FILE = TXT_FILE
 event_set = set()
