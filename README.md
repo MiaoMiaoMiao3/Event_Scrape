@@ -7,7 +7,7 @@ Like most people today, I find it hard to discover things to do outside of the h
 ## Requirements
 To execute this program, I used:
 - A Google Cloud account
-- An email delivery service account called Mailjet
+- An email delivery service called Mailjet
 
 <br/>
 
@@ -15,7 +15,7 @@ To execute this program, I used:
 ![architecture diagram](https://drive.google.com/uc?export=view&id=1nkhoop7bb8wDr8_b8Q_gng5VKIBkSvkh)
 <br/><sup>Diagram of Integrated Services</sup><br/><br/>
 
-The architecture diagram above shows the purpose of each service and how they integrate together. There are two Python scripts that exist - one that lives on the VM which scrapes the web when executed by a cronjob (Event_Scrape_VM.py) and one that is stored in Cloud Functions, which sends an email with the scraped data content when new data is uploaded into Cloud Storage (main.py).
+The architecture diagram above shows the purpose of each service and how they integrate together. There are two Python scripts that exist - one that lives on the Compute Engine, the VM which scrapes the website (Event_Scrape_VM.py) and one that is stored in Cloud Functions, which sends an email with the scraped data content when new data is uploaded into Cloud Storage (main.py).
 
 ## Setting Up Cloud Storage
 To store the scraped data, I created a new storage bucket with a standard storage class using gcloud: <br/>
@@ -23,14 +23,14 @@ To store the scraped data, I created a new storage bucket with a standard storag
 ```bash
 gsutil mb gs://event_scraper
 ```
-Each time a web scrape is done, it generates a file (event.txt) that I upload into this storage bucket using a cron job. The uploaded data is currently set to overwrite any existing file of the same name (since I'm not concerned with tracking events over time). <br/>
+Each time a web scrape is done, it generates a file (event.txt) that I upload into this storage bucket. The uploaded data is currently set to overwrite any existing file of the same name (since I'm not concerned with tracking events over time). <br/>
 To access the bucket with Cloud Functions, I created a service account tied to this bucket with the 'Owner' role and downloaded the JSON file for the secret key associated with this account ('event_scraper_key.json', see image in 'Creating An Event Trigger' below).<br/>
 
 <br/>
 
 ## Setting Up the Virtual Machine
-To create the weekly cron job that executes the web scraper, I created a f1-micro VM with f1-micro machine type and read/write access granted for the the Service Account. Since I only intend on running the code once a week, I don't need high CPU or processing power.
-Once the instance has been created, I SSH'ed into the instance to install tmux and pip package manager. I use tmux to detach my terminal from running processes, meaning I can run the python program even when the terminal window is closed:
+To create the weekly cron job that executes the web scraper, I created a f1-micro VM with f1-micro machine type and read/write access enabled.
+Once the instance has been created, I SSH'ed into the instance to install tmux and pip package manager. I use tmux to detach my terminal from running processes, which allows me to run the python program after the terminal window is closed:
 
 ```bash
 sudo apt-get install python3-pip
@@ -41,7 +41,7 @@ I created a directory to store the webscraper code (Event_Scrape_VM.py) along wi
 ```bash
 pip3 install -r requirements_VM.txt
 ```
-Event_Scrape_VM.py uses a module called 'Beautiful Soup' to scrape a website that contains events collected throughout Seattle; it's set up to filter out just the events (using html tags and class names) and makes use of the set data structure to ensure no duplicate events are stored. The scraped events are then written to a file called 'events.txt'. I converted the python code into an executable using Linux change mode:
+Event_Scrape_VM.py uses a module called 'Beautiful Soup' to scrape a website that contains events collected throughout Seattle; it's set up to filter out just the events (using html tags and class names) and ensures no duplicate events are stored. The scraped events are then written to a file called 'events.txt'. To execute the code using a cron job, I first need to use Linux change mode to convert the Python script into an executable:
 
 ```bash
 chmod +x Event_Scrape_VM.py
@@ -73,7 +73,7 @@ Once I set up the web scraper in the VM, I set up the python code in 'Cloud Func
 <sup>Inline Code Editor with associated files </sup>
 
 ## Testing Functionality
-Lastly, to test the Cloud Function, I uploaded a dummy text file into Cloud Storage and confirmed that an email was sent. I also changed the cron jobs to run every 5 minute to ensure that the job was running correctly and, voila, email received!
+To test the Cloud Function, I uploaded a dummy text file into Cloud Storage and confirmed that this triggers my Cloud Function and that an email is sent. Voila, email received!
 <br/>
 
 ![Cloud Function - Code Setup](https://drive.google.com/uc?export=view&id=1iI2y5QDue2p-e4KpcjhCGsyc62ocH3ZD)
